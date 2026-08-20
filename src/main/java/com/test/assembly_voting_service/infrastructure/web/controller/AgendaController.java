@@ -1,8 +1,8 @@
 package com.test.assembly_voting_service.infrastructure.web.controller;
 
+import com.test.assembly_voting_service.infrastructure.web.mapper.AgendaWebMapper;
 import com.test.assembly_voting_service.application.usecase.CreateAgendaUseCase;
 import com.test.assembly_voting_service.application.usecase.ListAgendasUseCase;
-import com.test.assembly_voting_service.application.usecase.command.CreateAgendaCommand;
 import com.test.assembly_voting_service.infrastructure.web.dto.request.CreateAgendaRequest;
 import com.test.assembly_voting_service.infrastructure.web.dto.response.AgendaResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,8 +44,9 @@ public class AgendaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AgendaResponse create(@Valid @RequestBody CreateAgendaRequest request) {
-        var agenda = createAgendaUseCase.execute(new CreateAgendaCommand(request.title()));
-        return new AgendaResponse(agenda.id(), agenda.title(), agenda.createdAt());
+        var command = AgendaWebMapper.toCommand(request);
+        var agenda = createAgendaUseCase.execute(command);
+        return AgendaWebMapper.toResponse(agenda);
     }
 
     @Operation(summary = "Listar pautas", description = "Retorna todas as pautas cadastradas")
@@ -53,7 +54,7 @@ public class AgendaController {
     @GetMapping
     public List<AgendaResponse> listAll() {
         return listAgendasUseCase.execute().stream()
-                .map(agenda -> new AgendaResponse(agenda.id(), agenda.title(), agenda.createdAt()))
+                .map(AgendaWebMapper::toResponse)
                 .toList();
     }
 }

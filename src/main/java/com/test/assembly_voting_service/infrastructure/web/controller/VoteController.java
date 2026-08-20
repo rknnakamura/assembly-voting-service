@@ -1,8 +1,8 @@
 package com.test.assembly_voting_service.infrastructure.web.controller;
 
+import com.test.assembly_voting_service.infrastructure.web.mapper.VoteWebMapper;
 import com.test.assembly_voting_service.application.usecase.CastVoteUseCase;
 import com.test.assembly_voting_service.application.usecase.GetVotingResultUseCase;
-import com.test.assembly_voting_service.application.usecase.command.CastVoteCommand;
 import com.test.assembly_voting_service.application.usecase.command.GetVotingResultQuery;
 import com.test.assembly_voting_service.infrastructure.web.dto.request.CastVoteRequest;
 import com.test.assembly_voting_service.infrastructure.web.dto.response.VoteResponse;
@@ -51,8 +51,9 @@ public class VoteController {
     public VoteResponse castVote(
             @Parameter(description = "ID da pauta") @PathVariable UUID agendaId,
             @Valid @RequestBody CastVoteRequest request) {
-        var vote = castVoteUseCase.execute(new CastVoteCommand(agendaId, request.memberId(), request.option()));
-        return new VoteResponse(vote.id(), vote.agendaId(), vote.memberId(), vote.option(), vote.createdAt());
+        var command = VoteWebMapper.toCommand(agendaId, request);
+        var vote = castVoteUseCase.execute(command);
+        return VoteWebMapper.toResponse(vote);
     }
 
     @Operation(summary = "Consultar resultado", description = "Retorna o resultado consolidado da votação de uma pauta")

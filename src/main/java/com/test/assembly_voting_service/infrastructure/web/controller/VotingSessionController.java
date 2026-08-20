@@ -1,7 +1,7 @@
 package com.test.assembly_voting_service.infrastructure.web.controller;
 
+import com.test.assembly_voting_service.infrastructure.web.mapper.VotingSessionWebMapper;
 import com.test.assembly_voting_service.application.usecase.OpenVotingSessionUseCase;
-import com.test.assembly_voting_service.application.usecase.command.OpenVotingSessionCommand;
 import com.test.assembly_voting_service.infrastructure.web.dto.request.OpenVotingSessionRequest;
 import com.test.assembly_voting_service.infrastructure.web.dto.response.VotingSessionResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,8 +44,8 @@ public class VotingSessionController {
     public VotingSessionResponse openVotingSession(
             @Parameter(description = "ID da pauta") @PathVariable UUID agendaId,
             @Valid @RequestBody(required = false) OpenVotingSessionRequest request) {
-        var duration = request != null ? request.durationInMinutes() : null;
-        var session = openVotingSessionUseCase.execute(new OpenVotingSessionCommand(agendaId, duration));
-        return new VotingSessionResponse(session.id(), session.agendaId(), session.startedAt(), session.endedAt());
+        var command = VotingSessionWebMapper.toCommand(agendaId, request);
+        var session = openVotingSessionUseCase.execute(command);
+        return VotingSessionWebMapper.toResponse(session);
     }
 }
