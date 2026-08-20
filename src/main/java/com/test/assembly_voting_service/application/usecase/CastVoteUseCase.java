@@ -4,6 +4,7 @@ import com.test.assembly_voting_service.application.port.out.MemberEligibilityGa
 import com.test.assembly_voting_service.application.port.out.MemberRepository;
 import com.test.assembly_voting_service.application.port.out.VoteRepository;
 import com.test.assembly_voting_service.application.port.out.VotingSessionRepository;
+import com.test.assembly_voting_service.application.port.out.AppLogger;
 import com.test.assembly_voting_service.application.usecase.command.CastVoteCommand;
 import com.test.assembly_voting_service.domain.exception.BusinessException;
 import com.test.assembly_voting_service.domain.exception.ResourceNotFoundException;
@@ -15,16 +16,19 @@ public class CastVoteUseCase {
     private final VoteRepository voteRepository;
     private final MemberRepository memberRepository;
     private final MemberEligibilityGateway memberEligibilityGateway;
+    private final AppLogger logger;
 
     public CastVoteUseCase(
             VotingSessionRepository votingSessionRepository,
             VoteRepository voteRepository,
             MemberRepository memberRepository,
-            MemberEligibilityGateway memberEligibilityGateway) {
+            MemberEligibilityGateway memberEligibilityGateway,
+            AppLogger logger) {
         this.votingSessionRepository = votingSessionRepository;
         this.voteRepository = voteRepository;
         this.memberRepository = memberRepository;
         this.memberEligibilityGateway = memberEligibilityGateway;
+        this.logger = logger;
     }
 
     public Vote execute(CastVoteCommand command) {
@@ -45,6 +49,8 @@ public class CastVoteUseCase {
         }
 
         var vote = Vote.create(command.agendaId(), command.memberId(), command.option());
-        return voteRepository.save(vote);
+        var savedVote = voteRepository.save(vote);
+        logger.info("Vote cast successfully for agenda ID: {} by member ID: {}", command.agendaId(), command.memberId());
+        return savedVote;
     }
 }

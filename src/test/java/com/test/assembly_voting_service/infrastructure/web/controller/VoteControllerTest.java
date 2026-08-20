@@ -72,9 +72,9 @@ class VoteControllerTest {
 
             assertNotNull(response);
             assertEquals(agendaId, response.agendaId());
-            assertEquals(0, response.yes());
-            assertEquals(0, response.no());
-            assertEquals(0, response.total());
+            assertEquals(0, response.totalYes());
+            assertEquals(0, response.totalNo());
+            assertEquals(0, response.totalVotes());
             verify(getVotingResultUseCase).execute(any(GetVotingResultQuery.class));
         }
     }

@@ -1,6 +1,7 @@
 package com.test.assembly_voting_service.application.usecase;
 
 import com.test.assembly_voting_service.application.port.out.AgendaRepository;
+import com.test.assembly_voting_service.application.port.out.AppLogger;
 import com.test.assembly_voting_service.application.port.out.VotingSessionRepository;
 import com.test.assembly_voting_service.application.usecase.command.OpenVotingSessionCommand;
 import com.test.assembly_voting_service.domain.exception.BusinessException;
@@ -29,6 +30,9 @@ class OpenVotingSessionUseCaseTest {
 
     @Mock
     private VotingSessionRepository votingSessionRepository;
+
+    @Mock
+    private AppLogger logger;
 
     @InjectMocks
     private OpenVotingSessionUseCase useCase;

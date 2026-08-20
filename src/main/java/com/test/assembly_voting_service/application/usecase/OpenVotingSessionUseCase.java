@@ -1,6 +1,7 @@
 package com.test.assembly_voting_service.application.usecase;
 
 import com.test.assembly_voting_service.application.port.out.AgendaRepository;
+import com.test.assembly_voting_service.application.port.out.AppLogger;
 import com.test.assembly_voting_service.application.port.out.VotingSessionRepository;
 import com.test.assembly_voting_service.application.usecase.command.OpenVotingSessionCommand;
 import com.test.assembly_voting_service.domain.exception.BusinessException;
@@ -11,10 +12,15 @@ public class OpenVotingSessionUseCase {
 
     private final AgendaRepository agendaRepository;
     private final VotingSessionRepository votingSessionRepository;
+    private final AppLogger logger;
 
-    public OpenVotingSessionUseCase(AgendaRepository agendaRepository, VotingSessionRepository votingSessionRepository) {
+    public OpenVotingSessionUseCase(
+            AgendaRepository agendaRepository,
+            VotingSessionRepository votingSessionRepository,
+            AppLogger logger) {
         this.agendaRepository = agendaRepository;
         this.votingSessionRepository = votingSessionRepository;
+        this.logger = logger;
     }
 
     public VotingSession execute(OpenVotingSessionCommand command) {
@@ -26,6 +32,8 @@ public class OpenVotingSessionUseCase {
         });
 
         var session = VotingSession.create(agenda.id(), command.durationInMinutes());
-        return votingSessionRepository.save(session);
+        var savedSession = votingSessionRepository.save(session);
+        logger.info("Voting session opened successfully for agenda ID: {}", agenda.id());
+        return savedSession;
     }
 }

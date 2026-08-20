@@ -10,6 +10,7 @@ import com.test.assembly_voting_service.application.usecase.CreateAgendaUseCase;
 import com.test.assembly_voting_service.application.usecase.GetVotingResultUseCase;
 import com.test.assembly_voting_service.application.usecase.ListAgendasUseCase;
 import com.test.assembly_voting_service.application.usecase.OpenVotingSessionUseCase;
+import com.test.assembly_voting_service.application.port.out.AppLogger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,8 +18,8 @@ import org.springframework.context.annotation.Configuration;
 public class UseCaseConfiguration {
 
     @Bean
-    public CreateAgendaUseCase createAgendaUseCase(AgendaRepository agendaRepository) {
-        return new CreateAgendaUseCase(agendaRepository);
+    public CreateAgendaUseCase createAgendaUseCase(AgendaRepository agendaRepository, AppLogger logger) {
+        return new CreateAgendaUseCase(agendaRepository, logger);
     }
 
     @Bean
@@ -29,8 +30,9 @@ public class UseCaseConfiguration {
     @Bean
     public OpenVotingSessionUseCase openVotingSessionUseCase(
             AgendaRepository agendaRepository,
-            VotingSessionRepository votingSessionRepository) {
-        return new OpenVotingSessionUseCase(agendaRepository, votingSessionRepository);
+            VotingSessionRepository votingSessionRepository,
+            AppLogger logger) {
+        return new OpenVotingSessionUseCase(agendaRepository, votingSessionRepository, logger);
     }
 
     @Bean
@@ -38,12 +40,13 @@ public class UseCaseConfiguration {
             VotingSessionRepository votingSessionRepository,
             VoteRepository voteRepository,
             MemberRepository memberRepository,
-            MemberEligibilityGateway memberEligibilityGateway) {
-        return new CastVoteUseCase(votingSessionRepository, voteRepository, memberRepository, memberEligibilityGateway);
+            MemberEligibilityGateway memberEligibilityGateway,
+            AppLogger logger) {
+        return new CastVoteUseCase(votingSessionRepository, voteRepository, memberRepository, memberEligibilityGateway, logger);
     }
 
     @Bean
-    public GetVotingResultUseCase getVotingResultUseCase() {
-        return new GetVotingResultUseCase();
+    public GetVotingResultUseCase getVotingResultUseCase(AppLogger logger) {
+        return new GetVotingResultUseCase(logger);
     }
 }

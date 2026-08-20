@@ -1,5 +1,6 @@
 package com.test.assembly_voting_service.application.usecase;
 
+import com.test.assembly_voting_service.application.port.out.AppLogger;
 import com.test.assembly_voting_service.domain.exception.DomainValidationException;
 import com.test.assembly_voting_service.application.port.out.AgendaRepository;
 import com.test.assembly_voting_service.application.usecase.command.CreateAgendaCommand;
@@ -20,6 +21,9 @@ class CreateAgendaUseCaseTest {
 
     @Mock
     private AgendaRepository agendaRepository;
+
+    @Mock
+    private AppLogger logger;
 
     @InjectMocks
     private CreateAgendaUseCase createAgendaUseCase;
