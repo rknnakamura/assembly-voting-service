@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "agendas")
+@Table(name = "agenda")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

@@ -11,7 +11,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "voting_sessions")
+@Table(name = "voting_session")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Entity
-@Table(name = "members")
+@Table(name = "member")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
