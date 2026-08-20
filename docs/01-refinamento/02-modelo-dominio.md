@@ -76,3 +76,7 @@ Vote "*" -right-> "1" VoteOption : utiliza >
 
 @enduml
 ```
+
+## 3. Diagrama Entidade-Relacionamento (DER)
+
+![img.png](images/DER.png)
