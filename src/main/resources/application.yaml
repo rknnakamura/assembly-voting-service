@@ -11,10 +11,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
         
   liquibase:
     enabled: true
@@ -23,3 +23,20 @@ spring:
 springdoc:
   default-produces-media-type: application/json
   override-with-generic-response: false
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %msg; traceId=%X{traceId:-}; spanId=%X{spanId:-}%n"
+
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: always

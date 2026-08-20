@@ -1,5 +1,6 @@
 package com.test.assembly_voting_service.application.usecase;
 
+import com.test.assembly_voting_service.application.port.out.AppLogger;
 import com.test.assembly_voting_service.application.port.out.MemberEligibilityGateway;
 import com.test.assembly_voting_service.application.port.out.MemberRepository;
 import com.test.assembly_voting_service.application.port.out.VoteRepository;
@@ -34,6 +35,8 @@ class CastVoteUseCaseTest {
     private MemberRepository memberRepository;
     @Mock
     private MemberEligibilityGateway memberEligibilityGateway;
+    @Mock
+    private AppLogger logger;
 
     @InjectMocks
     private CastVoteUseCase useCase;
