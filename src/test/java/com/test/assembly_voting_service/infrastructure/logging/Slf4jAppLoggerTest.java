@@ -29,6 +29,6 @@ class Slf4jAppLoggerTest {
 
         appLogger.info(message, arg);
 
-        verify(mockLogger, times(1)).info(message, arg);
+        verify(mockLogger, times(1)).info(message, new Object[]{arg});
     }
 }

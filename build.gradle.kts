@@ -35,8 +35,12 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-liquibase-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+	implementation("io.github.openfeign:feign-core:13.1")
+	implementation("io.github.openfeign:feign-jackson:13.1")
+	implementation("io.github.openfeign:feign-slf4j:13.1")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
+
 
 tasks.withType<Test> {
 	useJUnitPlatform()
