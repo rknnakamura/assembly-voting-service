@@ -16,4 +16,8 @@ public record Agenda(UUID id, String title, OffsetDateTime createdAt) {
             throw new IllegalArgumentException("title must not be blank");
         }
     }
+
+    public static Agenda create(String title) {
+        return new Agenda(UUID.randomUUID(), title, OffsetDateTime.now());
+    }
 }
