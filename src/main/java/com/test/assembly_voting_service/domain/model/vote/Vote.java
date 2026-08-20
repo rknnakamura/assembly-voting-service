@@ -14,4 +14,8 @@ public record Vote(UUID id, UUID agendaId, UUID memberId, VoteOption option, Off
         requireNonNull(option, "option must not be null");
         requireNonNull(createdAt, "createdAt must not be null");
     }
+
+    public static Vote create(UUID agendaId, UUID memberId, VoteOption option) {
+        return new Vote(UUID.randomUUID(), agendaId, memberId, option, OffsetDateTime.now());
+    }
 }
