@@ -6,6 +6,9 @@ import com.test.assembly_voting_service.infrastructure.web.dto.response.app.Form
 import com.test.assembly_voting_service.infrastructure.web.dto.response.app.FormResponse.FormItem;
 import com.test.assembly_voting_service.infrastructure.web.dto.response.app.SelectionResponse;
 import com.test.assembly_voting_service.infrastructure.web.dto.response.app.SelectionResponse.SelectionItem;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Tag(name = "Mobile App (BFF)", description = "Endpoints para Server-Driven UI do aplicativo móvel")
 @RestController
 @RequestMapping("/app")
 public class AppController {
@@ -32,6 +36,7 @@ public class AppController {
         return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
     }
 
+    @Operation(summary = "Formulário de nova pauta", description = "Retorna o layout para o formulário de criação de pauta")
     @GetMapping("/form/agendas")
     public FormResponse getAgendaForm() {
         Map<String, Object> bodyTemplate = new HashMap<>();
@@ -45,6 +50,7 @@ public class AppController {
         );
     }
 
+    @Operation(summary = "Seleção de pautas (Gerenciamento)", description = "Retorna o layout de seleção de pautas para abertura de sessão")
     @GetMapping("/select/agendas/management")
     public SelectionResponse getManagementAgendaSelection() {
         var items = listAgendasUseCase.execute().stream()
@@ -57,8 +63,10 @@ public class AppController {
         return new SelectionResponse("SELECAO", "Pautas", items);
     }
 
+    @Operation(summary = "Formulário de abertura de sessão", description = "Retorna o layout para definir a duração e abrir uma sessão de votação")
     @PostMapping("/form/agendas/{agendaId}/voting-session")
-    public FormResponse getOpenSessionForm(@PathVariable UUID agendaId) {
+    public FormResponse getOpenSessionForm(
+            @Parameter(description = "ID da pauta") @PathVariable UUID agendaId) {
         Map<String, Object> bodyTemplate = new HashMap<>();
         bodyTemplate.put("durationInMinutes", 1);
 
@@ -70,6 +78,7 @@ public class AppController {
         );
     }
 
+    @Operation(summary = "Seleção de pautas (Votação)", description = "Retorna o layout de seleção de pautas disponíveis para o associado votar")
     @GetMapping("/select/agendas/voting")
     public SelectionResponse getVotingAgendaSelection() {
         var items = listAgendasUseCase.execute().stream()
@@ -82,8 +91,10 @@ public class AppController {
         return new SelectionResponse("SELECAO", "Escolha uma pauta para votar", items);
     }
 
+    @Operation(summary = "Seleção de voto (Opções)", description = "Retorna o layout com os botões de opções de voto (Sim/Não) para uma pauta")
     @PostMapping("/select/agendas/{agendaId}/voting")
-    public SelectionResponse getVoteSelection(@PathVariable UUID agendaId) {
+    public SelectionResponse getVoteSelection(
+            @Parameter(description = "ID da pauta") @PathVariable UUID agendaId) {
         var items = List.of(
                 new SelectionItem("SIM",
                         getBaseUrl() + "/api/v1/agendas/" + agendaId + "/votes",

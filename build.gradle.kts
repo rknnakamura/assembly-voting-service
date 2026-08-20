@@ -27,6 +27,7 @@ dependencies {
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-liquibase-test")
