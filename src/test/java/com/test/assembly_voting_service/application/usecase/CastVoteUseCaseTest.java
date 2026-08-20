@@ -5,6 +5,8 @@ import com.test.assembly_voting_service.application.port.out.MemberRepository;
 import com.test.assembly_voting_service.application.port.out.VoteRepository;
 import com.test.assembly_voting_service.application.port.out.VotingSessionRepository;
 import com.test.assembly_voting_service.application.usecase.command.CastVoteCommand;
+import com.test.assembly_voting_service.domain.exception.BusinessException;
+import com.test.assembly_voting_service.domain.exception.ResourceNotFoundException;
 import com.test.assembly_voting_service.domain.model.agenda.VotingSession;
 import com.test.assembly_voting_service.domain.model.member.Member;
 import com.test.assembly_voting_service.domain.model.vote.VoteOption;
@@ -60,7 +62,7 @@ class CastVoteUseCaseTest {
     @Test
     void shouldThrowWhenSessionNotFound() {
         var command = new CastVoteCommand(UUID.randomUUID(), UUID.randomUUID(), VoteOption.YES);
-        assertThrows(IllegalArgumentException.class, () -> useCase.execute(command));
+        assertThrows(ResourceNotFoundException.class, () -> useCase.execute(command));
     }
 
     @Test
@@ -72,7 +74,7 @@ class CastVoteUseCaseTest {
 
         when(votingSessionRepository.findByAgendaId(agendaId)).thenReturn(Optional.of(closedSession));
 
-        var ex = assertThrows(IllegalStateException.class, () -> useCase.execute(command));
+        var ex = assertThrows(BusinessException.class, () -> useCase.execute(command));
         assertEquals("Voting session is closed", ex.getMessage());
     }
 
@@ -89,7 +91,7 @@ class CastVoteUseCaseTest {
         doNothing().when(memberEligibilityGateway).validateEligibility(member.cpf());
         when(voteRepository.existsByAgendaIdAndMemberId(agendaId, memberId)).thenReturn(true);
 
-        var ex = assertThrows(IllegalStateException.class, () -> useCase.execute(command));
+        var ex = assertThrows(BusinessException.class, () -> useCase.execute(command));
         assertEquals("Member has already voted on this agenda", ex.getMessage());
     }
 
@@ -103,7 +105,7 @@ class CastVoteUseCaseTest {
         when(votingSessionRepository.findByAgendaId(agendaId)).thenReturn(Optional.of(session));
         when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
-        var ex = assertThrows(IllegalArgumentException.class, () -> useCase.execute(command));
+        var ex = assertThrows(ResourceNotFoundException.class, () -> useCase.execute(command));
         assertEquals("Member not found", ex.getMessage());
     }
 }

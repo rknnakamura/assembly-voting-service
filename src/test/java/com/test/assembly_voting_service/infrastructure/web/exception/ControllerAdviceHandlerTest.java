@@ -1,5 +1,7 @@
 package com.test.assembly_voting_service.infrastructure.web.exception;
 
+import com.test.assembly_voting_service.domain.exception.BusinessException;
+import com.test.assembly_voting_service.domain.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -42,20 +44,28 @@ class ControllerAdviceHandlerTest {
     }
 
     @Test
-    void shouldHandleDomainExceptions() {
-        var ex = new IllegalArgumentException("Voto já registrado para este membro.");
-
-        var response = handler.handleDomainExceptions(ex);
+    void shouldHandleResourceNotFoundException() {
+        var ex = new ResourceNotFoundException("Agenda not found");
+        var response = handler.handleResourceNotFoundException(ex);
 
         assertNotNull(response);
         assertNotNull(response.timestamp());
-        assertEquals("Voto já registrado para este membro.", response.message());
+        assertEquals("Agenda not found", response.message());
+    }
+
+    @Test
+    void shouldHandleBusinessException() {
+        var ex = new BusinessException("Voting session is closed");
+        var response = handler.handleBusinessException(ex);
+
+        assertNotNull(response);
+        assertNotNull(response.timestamp());
+        assertEquals("Voting session is closed", response.message());
     }
 
     @Test
     void shouldHandleHttpMessageNotReadableException() {
         var ex = mock(HttpMessageNotReadableException.class);
-
         var response = handler.handleHttpMessageNotReadableException(ex);
 
         assertNotNull(response);
@@ -66,7 +76,6 @@ class ControllerAdviceHandlerTest {
     @Test
     void shouldHandleGenericException() {
         var ex = new Exception("Falha de conexão com banco de dados");
-
         var response = handler.handleGenericException(ex);
 
         assertNotNull(response);
