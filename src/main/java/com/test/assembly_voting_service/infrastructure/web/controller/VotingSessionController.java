@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/agendas/{agendaId}/voting-session")
 public class VotingSessionController {
@@ -28,7 +30,7 @@ public class VotingSessionController {
     @ResponseStatus(HttpStatus.CREATED)
     public VotingSessionResponse openVotingSession(
             @PathVariable UUID agendaId,
-            @RequestBody(required = false) OpenVotingSessionRequest request) {
+            @Valid @RequestBody(required = false) OpenVotingSessionRequest request) {
         // Trata caso a requisição venha sem body (vazia) já que duration é opcional
         Integer duration = request != null ? request.durationInMinutes() : null;
         var session = openVotingSessionUseCase.execute(new OpenVotingSessionCommand(agendaId, duration));

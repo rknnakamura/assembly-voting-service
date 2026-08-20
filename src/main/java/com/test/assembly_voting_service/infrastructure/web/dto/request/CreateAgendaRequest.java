@@ -1,4 +1,9 @@
 package com.test.assembly_voting_service.infrastructure.web.dto.request;
 
-public record CreateAgendaRequest(String title) {
+import jakarta.validation.constraints.NotBlank;
+
+public record CreateAgendaRequest(
+        @NotBlank(message = "Title is required") 
+        String title
+) {
 }

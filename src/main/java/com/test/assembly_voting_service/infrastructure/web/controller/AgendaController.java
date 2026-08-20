@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/agendas")
 public class AgendaController {
@@ -31,7 +33,7 @@ public class AgendaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AgendaResponse create(@RequestBody CreateAgendaRequest request) {
+    public AgendaResponse create(@Valid @RequestBody CreateAgendaRequest request) {
         var agenda = createAgendaUseCase.execute(new CreateAgendaCommand(request.title()));
         return new AgendaResponse(agenda.id(), agenda.title(), agenda.createdAt());
     }

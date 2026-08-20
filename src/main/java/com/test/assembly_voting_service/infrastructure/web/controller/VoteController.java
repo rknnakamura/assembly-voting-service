@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/agendas/{agendaId}")
 public class VoteController {
@@ -36,7 +38,7 @@ public class VoteController {
     @ResponseStatus(HttpStatus.CREATED)
     public VoteResponse castVote(
             @PathVariable UUID agendaId,
-            @RequestBody CastVoteRequest request) {
+            @Valid @RequestBody CastVoteRequest request) {
         var vote = castVoteUseCase.execute(new CastVoteCommand(agendaId, request.memberId(), request.option()));
         return new VoteResponse(vote.id(), vote.agendaId(), vote.memberId(), vote.option(), vote.createdAt());
     }
