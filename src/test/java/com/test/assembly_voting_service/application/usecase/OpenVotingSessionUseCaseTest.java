@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Duration;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -66,5 +67,39 @@ class OpenVotingSessionUseCaseTest {
         when(votingSessionRepository.findByAgendaId(agendaId)).thenReturn(Optional.of(existingSession));
 
         assertThrows(IllegalStateException.class, () -> useCase.execute(command));
+    }
+
+    @Test
+    void shouldDefaultToOneMinuteWhenDurationIsNull() {
+        var agendaId = UUID.randomUUID();
+        var command = new OpenVotingSessionCommand(agendaId, null);
+        var agenda = Agenda.create("Pauta");
+
+        when(agendaRepository.findById(agendaId)).thenReturn(Optional.of(agenda));
+        when(votingSessionRepository.findByAgendaId(agendaId)).thenReturn(Optional.empty());
+        when(votingSessionRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        var result = useCase.execute(command);
+
+        assertNotNull(result);
+        assertEquals(1, Duration.between(result.startedAt(), result.endedAt()).toMinutes());
+        verify(votingSessionRepository).save(any());
+    }
+
+    @Test
+    void shouldDefaultToOneMinuteWhenDurationIsNegative() {
+        var agendaId = UUID.randomUUID();
+        var command = new OpenVotingSessionCommand(agendaId, -5);
+        var agenda = Agenda.create("Pauta");
+
+        when(agendaRepository.findById(agendaId)).thenReturn(Optional.of(agenda));
+        when(votingSessionRepository.findByAgendaId(agendaId)).thenReturn(Optional.empty());
+        when(votingSessionRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        var result = useCase.execute(command);
+
+        assertNotNull(result);
+        assertEquals(1, Duration.between(result.startedAt(), result.endedAt()).toMinutes());
+        verify(votingSessionRepository).save(any());
     }
 }

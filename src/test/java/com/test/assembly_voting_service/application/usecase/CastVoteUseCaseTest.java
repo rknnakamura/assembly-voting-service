@@ -60,8 +60,50 @@ class CastVoteUseCaseTest {
     @Test
     void shouldThrowWhenSessionNotFound() {
         var command = new CastVoteCommand(UUID.randomUUID(), UUID.randomUUID(), VoteOption.YES);
-        when(votingSessionRepository.findByAgendaId(command.agendaId())).thenReturn(Optional.empty());
-
         assertThrows(IllegalArgumentException.class, () -> useCase.execute(command));
+    }
+
+    @Test
+    void shouldThrowWhenSessionIsClosed() {
+        var agendaId = UUID.randomUUID();
+        var command = new CastVoteCommand(agendaId, UUID.randomUUID(), VoteOption.YES);
+        var past = java.time.OffsetDateTime.now().minusMinutes(10);
+        var closedSession = new VotingSession(UUID.randomUUID(), agendaId, past, past.plusMinutes(5));
+
+        when(votingSessionRepository.findByAgendaId(agendaId)).thenReturn(Optional.of(closedSession));
+
+        var ex = assertThrows(IllegalStateException.class, () -> useCase.execute(command));
+        assertEquals("Voting session is closed", ex.getMessage());
+    }
+
+    @Test
+    void shouldThrowWhenMemberAlreadyVoted() {
+        var agendaId = UUID.randomUUID();
+        var memberId = UUID.randomUUID();
+        var command = new CastVoteCommand(agendaId, memberId, VoteOption.YES);
+        var session = VotingSession.create(agendaId, 10);
+        var member = new Member(memberId, "12345678901");
+
+        when(votingSessionRepository.findByAgendaId(agendaId)).thenReturn(Optional.of(session));
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
+        doNothing().when(memberEligibilityGateway).validateEligibility(member.cpf());
+        when(voteRepository.existsByAgendaIdAndMemberId(agendaId, memberId)).thenReturn(true);
+
+        var ex = assertThrows(IllegalStateException.class, () -> useCase.execute(command));
+        assertEquals("Member has already voted on this agenda", ex.getMessage());
+    }
+
+    @Test
+    void shouldThrowWhenMemberNotFound() {
+        var agendaId = UUID.randomUUID();
+        var memberId = UUID.randomUUID();
+        var command = new CastVoteCommand(agendaId, memberId, VoteOption.YES);
+        var session = VotingSession.create(agendaId, 10);
+
+        when(votingSessionRepository.findByAgendaId(agendaId)).thenReturn(Optional.of(session));
+        when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
+
+        var ex = assertThrows(IllegalArgumentException.class, () -> useCase.execute(command));
+        assertEquals("Member not found", ex.getMessage());
     }
 }
