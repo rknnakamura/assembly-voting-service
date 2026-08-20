@@ -2,8 +2,8 @@ package com.test.assembly_voting_service.infrastructure.persistence.adapter;
 
 import com.test.assembly_voting_service.application.port.out.VotingSessionRepository;
 import com.test.assembly_voting_service.domain.model.agenda.VotingSession;
-import com.test.assembly_voting_service.infrastructure.persistence.entity.VotingSessionEntity;
 import com.test.assembly_voting_service.infrastructure.persistence.repository.SpringDataVotingSessionRepository;
+import com.test.assembly_voting_service.infrastructure.persistence.mapper.VotingSessionMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -20,19 +20,14 @@ public class VotingSessionRepositoryAdapter implements VotingSessionRepository {
 
     @Override
     public VotingSession save(VotingSession session) {
-        var entity = VotingSessionEntity.builder()
-                .id(session.id())
-                .agendaId(session.agendaId())
-                .startedAt(session.startedAt())
-                .endedAt(session.endedAt())
-                .build();
+        var entity = VotingSessionMapper.toEntity(session);
         var saved = repository.save(entity);
-        return new VotingSession(saved.getId(), saved.getAgendaId(), saved.getStartedAt(), saved.getEndedAt());
+        return VotingSessionMapper.toDomain(saved);
     }
 
     @Override
     public Optional<VotingSession> findByAgendaId(UUID agendaId) {
         return repository.findByAgendaId(agendaId)
-                .map(e -> new VotingSession(e.getId(), e.getAgendaId(), e.getStartedAt(), e.getEndedAt()));
+                .map(VotingSessionMapper::toDomain);
     }
 }

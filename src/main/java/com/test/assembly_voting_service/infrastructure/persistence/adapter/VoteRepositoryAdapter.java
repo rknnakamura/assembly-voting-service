@@ -2,8 +2,8 @@ package com.test.assembly_voting_service.infrastructure.persistence.adapter;
 
 import com.test.assembly_voting_service.application.port.out.VoteRepository;
 import com.test.assembly_voting_service.domain.model.vote.Vote;
-import com.test.assembly_voting_service.infrastructure.persistence.entity.VoteEntity;
 import com.test.assembly_voting_service.infrastructure.persistence.repository.SpringDataVoteRepository;
+import com.test.assembly_voting_service.infrastructure.persistence.mapper.VoteMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -19,15 +19,9 @@ public class VoteRepositoryAdapter implements VoteRepository {
 
     @Override
     public Vote save(Vote vote) {
-        var entity = VoteEntity.builder()
-                .id(vote.id())
-                .agendaId(vote.agendaId())
-                .memberId(vote.memberId())
-                .option(vote.option())
-                .createdAt(vote.createdAt())
-                .build();
+        var entity = VoteMapper.toEntity(vote);
         var saved = repository.save(entity);
-        return new Vote(saved.getId(), saved.getAgendaId(), saved.getMemberId(), saved.getOption(), saved.getCreatedAt());
+        return VoteMapper.toDomain(saved);
     }
 
     @Override

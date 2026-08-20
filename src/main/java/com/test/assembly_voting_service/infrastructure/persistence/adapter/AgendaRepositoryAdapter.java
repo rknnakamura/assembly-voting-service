@@ -2,8 +2,8 @@ package com.test.assembly_voting_service.infrastructure.persistence.adapter;
 
 import com.test.assembly_voting_service.application.port.out.AgendaRepository;
 import com.test.assembly_voting_service.domain.model.agenda.Agenda;
-import com.test.assembly_voting_service.infrastructure.persistence.entity.AgendaEntity;
 import com.test.assembly_voting_service.infrastructure.persistence.repository.SpringDataAgendaRepository;
+import com.test.assembly_voting_service.infrastructure.persistence.mapper.AgendaMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,25 +21,21 @@ public class AgendaRepositoryAdapter implements AgendaRepository {
 
     @Override
     public Agenda save(Agenda agenda) {
-        var entity = AgendaEntity.builder()
-                .id(agenda.id())
-                .title(agenda.title())
-                .createdAt(agenda.createdAt())
-                .build();
+        var entity = AgendaMapper.toEntity(agenda);
         var saved = repository.save(entity);
-        return new Agenda(saved.getId(), saved.getTitle(), saved.getCreatedAt());
+        return AgendaMapper.toDomain(saved);
     }
 
     @Override
     public List<Agenda> findAll() {
         return repository.findAll().stream()
-                .map(entity -> new Agenda(entity.getId(), entity.getTitle(), entity.getCreatedAt()))
+                .map(AgendaMapper::toDomain)
                 .toList();
     }
 
     @Override
     public Optional<Agenda> findById(UUID id) {
         return repository.findById(id)
-                .map(entity -> new Agenda(entity.getId(), entity.getTitle(), entity.getCreatedAt()));
+                .map(AgendaMapper::toDomain);
     }
 }
