@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: renato
+      changes:
+        - insert:
+            tableName: member
+            columns:
+              - column:
+                  name: id
+                  value: 8dc2dbe4-b5d5-4543-9be2-d7d336b99dc1
+              - column:
+                  name: cpf
+                  value: "87410997028"
