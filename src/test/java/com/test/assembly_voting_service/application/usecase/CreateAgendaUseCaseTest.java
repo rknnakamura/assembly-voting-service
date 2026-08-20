@@ -1,5 +1,6 @@
 package com.test.assembly_voting_service.application.usecase;
 
+import com.test.assembly_voting_service.domain.exception.DomainValidationException;
 import com.test.assembly_voting_service.application.port.out.AgendaRepository;
 import com.test.assembly_voting_service.application.usecase.command.CreateAgendaCommand;
 import com.test.assembly_voting_service.domain.model.agenda.Agenda;
@@ -45,7 +46,7 @@ class CreateAgendaUseCaseTest {
     void shouldThrowExceptionWhenTitleIsBlank() {
         var command = new CreateAgendaCommand("   ");
 
-        var ex = assertThrows(IllegalArgumentException.class, () -> createAgendaUseCase.execute(command));
+        var ex = assertThrows(DomainValidationException.class, () -> createAgendaUseCase.execute(command));
         assertEquals("title must not be blank", ex.getMessage());
         
         verify(agendaRepository, never()).save(any());

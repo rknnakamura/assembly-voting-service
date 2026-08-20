@@ -1,5 +1,6 @@
 package com.test.assembly_voting_service.domain.model;
 
+import com.test.assembly_voting_service.domain.exception.DomainValidationException;
 import com.test.assembly_voting_service.domain.model.member.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -30,7 +31,7 @@ class MemberTest {
         @Test
         @DisplayName("deve lançar exceção quando id for nulo")
         void shouldThrowWhenIdIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Member(null, "12345678901"));
             assertEquals("id must not be null", ex.getMessage());
         }
@@ -38,7 +39,7 @@ class MemberTest {
         @Test
         @DisplayName("deve lançar exceção quando cpf for nulo")
         void shouldThrowWhenCpfIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Member(UUID.randomUUID(), null));
             assertEquals("cpf must not be null", ex.getMessage());
         }
@@ -46,7 +47,7 @@ class MemberTest {
         @Test
         @DisplayName("deve lançar exceção quando cpf for vazio")
         void shouldThrowWhenCpfIsEmpty() {
-            var ex = assertThrows(IllegalArgumentException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Member(UUID.randomUUID(), ""));
             assertEquals("cpf must not be blank", ex.getMessage());
         }
@@ -54,7 +55,7 @@ class MemberTest {
         @Test
         @DisplayName("deve lançar exceção quando cpf contiver apenas espaços")
         void shouldThrowWhenCpfIsBlank() {
-            var ex = assertThrows(IllegalArgumentException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Member(UUID.randomUUID(), "   "));
             assertEquals("cpf must not be blank", ex.getMessage());
         }

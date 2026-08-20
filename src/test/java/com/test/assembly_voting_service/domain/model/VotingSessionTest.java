@@ -1,5 +1,6 @@
 package com.test.assembly_voting_service.domain.model;
 
+import com.test.assembly_voting_service.domain.exception.DomainValidationException;
 import com.test.assembly_voting_service.domain.model.agenda.VotingSession;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -36,7 +37,7 @@ class VotingSessionTest {
         @DisplayName("deve lançar exceção quando id for nulo")
         void shouldThrowWhenIdIsNull() {
             var now = OffsetDateTime.now();
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new VotingSession(null, UUID.randomUUID(), now, now.plusMinutes(1)));
             assertEquals("id must not be null", ex.getMessage());
         }
@@ -45,7 +46,7 @@ class VotingSessionTest {
         @DisplayName("deve lançar exceção quando agendaId for nulo")
         void shouldThrowWhenAgendaIdIsNull() {
             var now = OffsetDateTime.now();
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new VotingSession(UUID.randomUUID(), null, now, now.plusMinutes(1)));
             assertEquals("agendaId must not be null", ex.getMessage());
         }
@@ -53,7 +54,7 @@ class VotingSessionTest {
         @Test
         @DisplayName("deve lançar exceção quando startedAt for nulo")
         void shouldThrowWhenStartedAtIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new VotingSession(UUID.randomUUID(), UUID.randomUUID(), null, OffsetDateTime.now()));
             assertEquals("startedAt must not be null", ex.getMessage());
         }
@@ -61,7 +62,7 @@ class VotingSessionTest {
         @Test
         @DisplayName("deve lançar exceção quando endedAt for nulo")
         void shouldThrowWhenEndedAtIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new VotingSession(UUID.randomUUID(), UUID.randomUUID(), OffsetDateTime.now(), null));
             assertEquals("endedAt must not be null", ex.getMessage());
         }
@@ -70,7 +71,7 @@ class VotingSessionTest {
         @DisplayName("deve lançar exceção quando endedAt for igual a startedAt")
         void shouldThrowWhenEndedAtEqualsStartedAt() {
             var now = OffsetDateTime.now();
-            var ex = assertThrows(IllegalArgumentException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new VotingSession(UUID.randomUUID(), UUID.randomUUID(), now, now));
             assertEquals("endedAt must be after startedAt", ex.getMessage());
         }
@@ -79,7 +80,7 @@ class VotingSessionTest {
         @DisplayName("deve lançar exceção quando endedAt for anterior a startedAt")
         void shouldThrowWhenEndedAtIsBeforeStartedAt() {
             var now = OffsetDateTime.now();
-            var ex = assertThrows(IllegalArgumentException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new VotingSession(UUID.randomUUID(), UUID.randomUUID(), now, now.minusMinutes(1)));
             assertEquals("endedAt must be after startedAt", ex.getMessage());
         }

@@ -1,5 +1,6 @@
 package com.test.assembly_voting_service.domain.model;
 
+import com.test.assembly_voting_service.domain.exception.DomainValidationException;
 import com.test.assembly_voting_service.domain.model.agenda.Agenda;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,7 +34,7 @@ class AgendaTest {
         @Test
         @DisplayName("deve lançar exceção quando id for nulo")
         void shouldThrowWhenIdIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Agenda(null, "Título", OffsetDateTime.now()));
             assertEquals("id must not be null", ex.getMessage());
         }
@@ -41,7 +42,7 @@ class AgendaTest {
         @Test
         @DisplayName("deve lançar exceção quando title for nulo")
         void shouldThrowWhenTitleIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Agenda(UUID.randomUUID(), null, OffsetDateTime.now()));
             assertEquals("title must not be null", ex.getMessage());
         }
@@ -49,7 +50,7 @@ class AgendaTest {
         @Test
         @DisplayName("deve lançar exceção quando title for vazio")
         void shouldThrowWhenTitleIsEmpty() {
-            var ex = assertThrows(IllegalArgumentException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Agenda(UUID.randomUUID(), "", OffsetDateTime.now()));
             assertEquals("title must not be blank", ex.getMessage());
         }
@@ -57,7 +58,7 @@ class AgendaTest {
         @Test
         @DisplayName("deve lançar exceção quando title contiver apenas espaços")
         void shouldThrowWhenTitleIsBlank() {
-            var ex = assertThrows(IllegalArgumentException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Agenda(UUID.randomUUID(), "   ", OffsetDateTime.now()));
             assertEquals("title must not be blank", ex.getMessage());
         }
@@ -65,7 +66,7 @@ class AgendaTest {
         @Test
         @DisplayName("deve lançar exceção quando createdAt for nulo")
         void shouldThrowWhenCreatedAtIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Agenda(UUID.randomUUID(), "Título", null));
             assertEquals("createdAt must not be null", ex.getMessage());
         }
