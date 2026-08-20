@@ -21,3 +21,58 @@ O gerenciamento de `Member` também não faz parte do escopo. Os membros utiliza
 | `Member`        | Representa o associado                                       | `id`, `cpf`                                         |
 
 ---
+
+## 2. Diagrama de Classes
+
+O diagrama abaixo representa o modelo de domínio definido para a aplicação.
+
+![Diagrama de Classes](./images/class-diagram.png)
+
+PlantUML
+```
+@startuml
+!theme plain
+skinparam classAttributeIconSize 0
+hide empty methods
+
+enum VoteOption {
+    YES
+    NO
+}
+
+class Agenda <<record>> {
+    - id: UUID
+    - title: String
+    - createdAt: OffsetDateTime
+}
+
+class VotingSession <<record>> {
+    - id: UUID
+    - agendaId: UUID
+    - startedAt: OffsetDateTime
+    - endedAt: OffsetDateTime
+    --
+    + isOpen(): boolean
+}
+
+class Member <<record>> {
+    - id: UUID
+    - cpf: String
+}
+
+class Vote <<record>> {
+    - id: UUID
+    - agendaId: UUID
+    - memberId: UUID
+    - option: VoteOption
+    - createdAt: OffsetDateTime
+}
+
+' Relacionamentos Conceituais
+Agenda "1" *-- "0..1" VotingSession : possui >
+Agenda "1" *-- "*" Vote : recebe >
+Member "1" -- "*" Vote : realiza >
+Vote "*" -right-> "1" VoteOption : utiliza >
+
+@enduml
+```
