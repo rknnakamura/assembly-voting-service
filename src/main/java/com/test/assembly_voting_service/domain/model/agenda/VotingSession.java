@@ -22,4 +22,11 @@ public record VotingSession(UUID id, UUID agendaId, OffsetDateTime startedAt, Of
         var now = OffsetDateTime.now();
         return !now.isBefore(startedAt) && now.isBefore(endedAt);
     }
+
+    public static VotingSession create(UUID agendaId, Integer durationMinutes) {
+        var duration = (durationMinutes == null || durationMinutes <= 0) ? 1 : durationMinutes;
+        var started = OffsetDateTime.now();
+        var ended = started.plusMinutes(duration);
+        return new VotingSession(UUID.randomUUID(), agendaId, started, ended);
+    }
 }
