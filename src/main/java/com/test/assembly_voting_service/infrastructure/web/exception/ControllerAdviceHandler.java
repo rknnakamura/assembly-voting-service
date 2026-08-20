@@ -1,5 +1,7 @@
 package com.test.assembly_voting_service.infrastructure.web.exception;
 
+import com.test.assembly_voting_service.domain.exception.BusinessException;
+import com.test.assembly_voting_service.domain.exception.ResourceNotFoundException;
 import com.test.assembly_voting_service.infrastructure.web.dto.response.ApiErrorResponse;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -25,9 +27,15 @@ public class ControllerAdviceHandler {
         return new ApiErrorResponse(OffsetDateTime.now(), errors);
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrorResponse handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return new ApiErrorResponse(OffsetDateTime.now(), ex.getMessage());
+    }
+
+    @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
-    public ApiErrorResponse handleDomainExceptions(RuntimeException ex) {
+    public ApiErrorResponse handleBusinessException(BusinessException ex) {
         return new ApiErrorResponse(OffsetDateTime.now(), ex.getMessage());
     }
 

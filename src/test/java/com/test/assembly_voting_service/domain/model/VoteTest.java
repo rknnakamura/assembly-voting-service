@@ -1,5 +1,6 @@
 package com.test.assembly_voting_service.domain.model;
 
+import com.test.assembly_voting_service.domain.exception.DomainValidationException;
 import com.test.assembly_voting_service.domain.model.vote.Vote;
 import com.test.assembly_voting_service.domain.model.vote.VoteOption;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +39,7 @@ class VoteTest {
         @Test
         @DisplayName("deve lançar exceção quando id for nulo")
         void shouldThrowWhenIdIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Vote(null, UUID.randomUUID(), UUID.randomUUID(), VoteOption.YES, OffsetDateTime.now()));
             assertEquals("id must not be null", ex.getMessage());
         }
@@ -46,7 +47,7 @@ class VoteTest {
         @Test
         @DisplayName("deve lançar exceção quando agendaId for nulo")
         void shouldThrowWhenAgendaIdIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Vote(UUID.randomUUID(), null, UUID.randomUUID(), VoteOption.YES, OffsetDateTime.now()));
             assertEquals("agendaId must not be null", ex.getMessage());
         }
@@ -54,7 +55,7 @@ class VoteTest {
         @Test
         @DisplayName("deve lançar exceção quando memberId for nulo")
         void shouldThrowWhenMemberIdIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Vote(UUID.randomUUID(), UUID.randomUUID(), null, VoteOption.YES, OffsetDateTime.now()));
             assertEquals("memberId must not be null", ex.getMessage());
         }
@@ -62,7 +63,7 @@ class VoteTest {
         @Test
         @DisplayName("deve lançar exceção quando option for nulo")
         void shouldThrowWhenOptionIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Vote(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), null, OffsetDateTime.now()));
             assertEquals("option must not be null", ex.getMessage());
         }
@@ -70,7 +71,7 @@ class VoteTest {
         @Test
         @DisplayName("deve lançar exceção quando createdAt for nulo")
         void shouldThrowWhenCreatedAtIsNull() {
-            var ex = assertThrows(NullPointerException.class,
+            var ex = assertThrows(DomainValidationException.class,
                     () -> new Vote(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), VoteOption.YES, null));
             assertEquals("createdAt must not be null", ex.getMessage());
         }

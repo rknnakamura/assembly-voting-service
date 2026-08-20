@@ -3,6 +3,8 @@ package com.test.assembly_voting_service.application.usecase;
 import com.test.assembly_voting_service.application.port.out.AgendaRepository;
 import com.test.assembly_voting_service.application.port.out.VotingSessionRepository;
 import com.test.assembly_voting_service.application.usecase.command.OpenVotingSessionCommand;
+import com.test.assembly_voting_service.domain.exception.BusinessException;
+import com.test.assembly_voting_service.domain.exception.ResourceNotFoundException;
 import com.test.assembly_voting_service.domain.model.agenda.Agenda;
 import com.test.assembly_voting_service.domain.model.agenda.VotingSession;
 import org.junit.jupiter.api.Test;
@@ -53,7 +55,7 @@ class OpenVotingSessionUseCaseTest {
         var command = new OpenVotingSessionCommand(UUID.randomUUID(), 5);
         when(agendaRepository.findById(command.agendaId())).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> useCase.execute(command));
+        assertThrows(ResourceNotFoundException.class, () -> useCase.execute(command));
     }
 
     @Test
@@ -66,7 +68,7 @@ class OpenVotingSessionUseCaseTest {
         when(agendaRepository.findById(agendaId)).thenReturn(Optional.of(agenda));
         when(votingSessionRepository.findByAgendaId(agendaId)).thenReturn(Optional.of(existingSession));
 
-        assertThrows(IllegalStateException.class, () -> useCase.execute(command));
+        assertThrows(BusinessException.class, () -> useCase.execute(command));
     }
 
     @Test
