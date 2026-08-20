@@ -31,3 +31,9 @@ databaseChangeLog:
             tableName: voting_session
             columnNames: agenda_id
             constraintName: uq_voting_session_agenda
+        - addForeignKeyConstraint:
+            baseTableName: voting_session
+            baseColumnNames: agenda_id
+            referencedTableName: agenda
+            referencedColumnNames: id
+            constraintName: fk_voting_session_agenda
