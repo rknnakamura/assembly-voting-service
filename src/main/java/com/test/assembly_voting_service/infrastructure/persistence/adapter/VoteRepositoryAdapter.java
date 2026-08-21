@@ -28,4 +28,9 @@ public class VoteRepositoryAdapter implements VoteRepository {
     public boolean existsByAgendaIdAndMemberId(UUID agendaId, UUID memberId) {
         return repository.existsByAgendaIdAndMemberId(agendaId, memberId);
     }
+
+    @Override
+    public long countByAgendaIdAndOption(UUID agendaId, com.test.assembly_voting_service.domain.model.vote.VoteOption option) {
+        return repository.countByAgendaIdAndOption(agendaId, option);
+    }
 }

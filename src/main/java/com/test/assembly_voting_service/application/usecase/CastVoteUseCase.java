@@ -42,7 +42,9 @@ public class CastVoteUseCase {
         var member = memberRepository.findById(command.memberId())
                 .orElseThrow(() -> new ResourceNotFoundException("Member not found"));
 
-        memberEligibilityGateway.validateEligibility(member.cpf());
+        if (!memberEligibilityGateway.isEligible(member.cpf())) {
+            throw new BusinessException("Member is not eligible to vote (UNABLE_TO_VOTE)");
+        }
 
         if (voteRepository.existsByAgendaIdAndMemberId(command.agendaId(), command.memberId())) {
             throw new BusinessException("Member has already voted on this agenda");

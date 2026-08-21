@@ -40,3 +40,7 @@ management:
   endpoint:
     health:
       show-details: always
+
+integration:
+  user-info:
+    url: ${USER_INFO_URL:https://user-info.free.beeceptor.com}

@@ -6,6 +6,8 @@ import com.test.assembly_voting_service.application.usecase.command.CastVoteComm
 import com.test.assembly_voting_service.application.usecase.command.GetVotingResultQuery;
 import com.test.assembly_voting_service.domain.model.vote.Vote;
 import com.test.assembly_voting_service.domain.model.vote.VoteOption;
+import com.test.assembly_voting_service.domain.model.vote.VotingResult;
+import com.test.assembly_voting_service.domain.model.vote.VotingStatus;
 import com.test.assembly_voting_service.infrastructure.web.dto.request.CastVoteRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -64,17 +66,20 @@ class VoteControllerTest {
     class GetResult {
 
         @Test
-        @DisplayName("Deve retornar resultado da votação com stub zerado")
-        void shouldReturnVotingResultStub() {
+        @DisplayName("Deve retornar resultado da votação corretamente")
+        void shouldReturnVotingResultSuccessfully() {
             var agendaId = UUID.randomUUID();
+            var votingResult = new VotingResult(agendaId, 150, 30);
+            when(getVotingResultUseCase.execute(any(GetVotingResultQuery.class))).thenReturn(votingResult);
 
             var response = controller.getResult(agendaId);
 
             assertNotNull(response);
             assertEquals(agendaId, response.agendaId());
-            assertEquals(0, response.totalYes());
-            assertEquals(0, response.totalNo());
-            assertEquals(0, response.totalVotes());
+            assertEquals(150, response.totalYes());
+            assertEquals(30, response.totalNo());
+            assertEquals(180, response.totalVotes());
+            assertEquals(VotingStatus.APPROVED, response.status());
             verify(getVotingResultUseCase).execute(any(GetVotingResultQuery.class));
         }
     }

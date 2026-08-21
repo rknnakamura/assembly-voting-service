@@ -3,7 +3,6 @@ package com.test.assembly_voting_service.infrastructure.web.controller;
 import com.test.assembly_voting_service.infrastructure.web.mapper.VoteWebMapper;
 import com.test.assembly_voting_service.application.usecase.CastVoteUseCase;
 import com.test.assembly_voting_service.application.usecase.GetVotingResultUseCase;
-import com.test.assembly_voting_service.application.usecase.command.GetVotingResultQuery;
 import com.test.assembly_voting_service.infrastructure.web.dto.request.CastVoteRequest;
 import com.test.assembly_voting_service.infrastructure.web.dto.response.VoteResponse;
 import com.test.assembly_voting_service.infrastructure.web.dto.response.VotingResultResponse;
@@ -64,7 +63,8 @@ public class VoteController {
     @GetMapping("/result")
     public VotingResultResponse getResult(
             @Parameter(description = "ID da pauta") @PathVariable UUID agendaId) {
-        getVotingResultUseCase.execute(new GetVotingResultQuery(agendaId));
-        return new VotingResultResponse(agendaId, 0, 0, 0);
+        var query = VoteWebMapper.toQuery(agendaId);
+        var result = getVotingResultUseCase.execute(query);
+        return VoteWebMapper.toResponse(result);
     }
 }
