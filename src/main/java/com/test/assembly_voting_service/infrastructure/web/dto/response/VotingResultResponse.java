@@ -1,5 +1,6 @@
 package com.test.assembly_voting_service.infrastructure.web.dto.response;
 
+import com.test.assembly_voting_service.domain.model.vote.VotingStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.UUID;
@@ -14,7 +15,7 @@ public record VotingResultResponse(
         long totalNo,
         @Schema(description = "Total de votos computados", example = "180")
         long totalVotes,
-        @Schema(description = "Resultado final da votação (APPROVED ou REPROVED)", example = "APPROVED")
-        String status
+        @Schema(description = "Resultado final da votação", example = "APPROVED")
+        VotingStatus status
 ) {
 }

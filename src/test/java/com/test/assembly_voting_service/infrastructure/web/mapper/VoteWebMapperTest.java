@@ -3,6 +3,7 @@ package com.test.assembly_voting_service.infrastructure.web.mapper;
 import com.test.assembly_voting_service.domain.model.vote.Vote;
 import com.test.assembly_voting_service.domain.model.vote.VoteOption;
 import com.test.assembly_voting_service.domain.model.vote.VotingResult;
+import com.test.assembly_voting_service.domain.model.vote.VotingStatus;
 import com.test.assembly_voting_service.infrastructure.web.dto.request.CastVoteRequest;
 import org.junit.jupiter.api.Test;
 
@@ -65,7 +66,7 @@ class VoteWebMapperTest {
         assertEquals(120, response.totalYes());
         assertEquals(40, response.totalNo());
         assertEquals(160, response.totalVotes());
-        assertEquals("APPROVED", response.status());
+        assertEquals(VotingStatus.APPROVED, response.status());
     }
 
     @Test
@@ -80,6 +81,6 @@ class VoteWebMapperTest {
         assertEquals(30, response.totalYes());
         assertEquals(40, response.totalNo());
         assertEquals(70, response.totalVotes());
-        assertEquals("REPROVED", response.status());
+        assertEquals(VotingStatus.REPROVED, response.status());
     }
 }

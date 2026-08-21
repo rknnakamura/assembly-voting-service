@@ -7,6 +7,7 @@ import com.test.assembly_voting_service.application.usecase.command.GetVotingRes
 import com.test.assembly_voting_service.domain.model.vote.Vote;
 import com.test.assembly_voting_service.domain.model.vote.VoteOption;
 import com.test.assembly_voting_service.domain.model.vote.VotingResult;
+import com.test.assembly_voting_service.domain.model.vote.VotingStatus;
 import com.test.assembly_voting_service.infrastructure.web.dto.request.CastVoteRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -78,7 +79,7 @@ class VoteControllerTest {
             assertEquals(150, response.totalYes());
             assertEquals(30, response.totalNo());
             assertEquals(180, response.totalVotes());
-            assertEquals("APPROVED", response.status());
+            assertEquals(VotingStatus.APPROVED, response.status());
             verify(getVotingResultUseCase).execute(any(GetVotingResultQuery.class));
         }
     }

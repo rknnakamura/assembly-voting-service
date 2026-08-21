@@ -8,7 +8,7 @@ public record VotingResult(UUID agendaId, long totalYes, long totalNo) {
         return totalYes + totalNo;
     }
 
-    public String status() {
-        return totalYes >= totalNo ? "APPROVED" : "REPROVED";
+    public VotingStatus status() {
+        return totalYes >= totalNo ? VotingStatus.APPROVED : VotingStatus.REPROVED;
     }
 }
