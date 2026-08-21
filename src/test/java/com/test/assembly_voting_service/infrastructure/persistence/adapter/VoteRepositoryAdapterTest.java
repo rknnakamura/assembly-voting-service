@@ -58,4 +58,15 @@ class VoteRepositoryAdapterTest {
         assertTrue(exists);
         verify(repository).existsByAgendaIdAndMemberId(agendaId, memberId);
     }
+    @Test
+    void shouldReturnCountByOption() {
+        var agendaId = UUID.randomUUID();
+
+        when(repository.countByAgendaIdAndOption(agendaId, VoteOption.YES)).thenReturn(10L);
+
+        var count = adapter.countByAgendaIdAndOption(agendaId, VoteOption.YES);
+
+        assertEquals(10L, count);
+        verify(repository).countByAgendaIdAndOption(agendaId, VoteOption.YES);
+    }
 }

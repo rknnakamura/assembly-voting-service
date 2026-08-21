@@ -13,6 +13,8 @@ public record VotingResultResponse(
         @Schema(description = "Total de votos contra (Não)", example = "30")
         long totalNo,
         @Schema(description = "Total de votos computados", example = "180")
-        long totalVotes
+        long totalVotes,
+        @Schema(description = "Resultado final da votação (APPROVED ou REPROVED)", example = "APPROVED")
+        String status
 ) {
 }

@@ -46,7 +46,10 @@ public class UseCaseConfiguration {
     }
 
     @Bean
-    public GetVotingResultUseCase getVotingResultUseCase(AppLogger logger) {
-        return new GetVotingResultUseCase(logger);
+    public GetVotingResultUseCase getVotingResultUseCase(
+            VotingSessionRepository votingSessionRepository,
+            VoteRepository voteRepository,
+            AppLogger appLogger) {
+        return new GetVotingResultUseCase(votingSessionRepository, voteRepository, appLogger);
     }
 }
