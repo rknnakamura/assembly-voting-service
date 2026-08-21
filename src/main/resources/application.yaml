@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: assembly-voting-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/assembly_voting
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+springdoc:
+  default-produces-media-type: application/json
+  override-with-generic-response: false
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %level - %msg; traceId=%X{traceId:-}; spanId=%X{spanId:-}%n"
+
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: always
+
+integration:
+  user-info:
+    url: ${USER_INFO_URL:https://user-info.free.beeceptor.com}

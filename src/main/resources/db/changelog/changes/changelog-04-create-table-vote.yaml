@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: renato
+      changes:
+        - createTable:
+            tableName: vote
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: agenda_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: member_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: option
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: vote
+            columnNames: agenda_id, member_id
+            constraintName: uq_vote_agenda_member
+        - addForeignKeyConstraint:
+            baseTableName: vote
+            baseColumnNames: agenda_id
+            referencedTableName: agenda
+            referencedColumnNames: id
+            constraintName: fk_vote_agenda
+        - addForeignKeyConstraint:
+            baseTableName: vote
+            baseColumnNames: member_id
+            referencedTableName: member
+            referencedColumnNames: id
+            constraintName: fk_vote_member

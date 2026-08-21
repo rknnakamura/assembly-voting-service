@@ -1,0 +1,281 @@
+{
+  "info": {
+    "_postman_id": "9d33a661-700f-4432-aa4b-eb290424acb1",
+    "name": "assembly_voting_service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "8748613"
+  },
+  "item": [
+    {
+      "name": "App (BFF)",
+      "item": [
+        {
+          "name": "01-Obter FORMULARIO cadastro pauta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/app/form/agendas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "app",
+                "form",
+                "agendas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "02-Obter SELECAO de pautas para gerenciamento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/app/select/agendas/management",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "app",
+                "select",
+                "agendas",
+                "management"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "03-Obter FORMULARIO para abrir sessão de votação",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/app/form/agendas/a30a2348-0563-4251-bd97-6ed1aa256c3f/voting-session",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "app",
+                "form",
+                "agendas",
+                "a30a2348-0563-4251-bd97-6ed1aa256c3f",
+                "voting-session"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "04-Obter SELECAO de pautas para votação",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/app/select/agendas/voting",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "app",
+                "select",
+                "agendas",
+                "voting"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "05-Obter FORMULARIO para votação da pauta",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/app/select/agendas/eecd1403-6f21-4f37-8890-a2bf59994227/voting",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "app",
+                "select",
+                "agendas",
+                "eecd1403-6f21-4f37-8890-a2bf59994227",
+                "voting"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Api",
+      "item": [
+        {
+          "name": "Obter agendas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/agendas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "agendas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obter resultado da votação",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"memberId\": \"8dc2dbe4-b5d5-4543-9be2-d7d336b99dc1\",\n    \"option\": \"YES\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/agendas/0311a36e-4b86-45a0-9699-ec7bfe9e57ce/result",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "agendas",
+                "0311a36e-4b86-45a0-9699-ec7bfe9e57ce",
+                "result"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar agenda",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Reforma Geral 778\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/agendas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "agendas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Abrir sessão para votação",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"durationInMinutes\": 120\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/agendas/0311a36e-4b86-45a0-9699-ec7bfe9e57ce/voting-session",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "agendas",
+                "0311a36e-4b86-45a0-9699-ec7bfe9e57ce",
+                "voting-session"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Realizar votação",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"memberId\": \"8dc2dbe4-b5d5-4543-9be2-d7d336b99dc3\",\n    \"option\": \"YES\" \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/agendas/0311a36e-4b86-45a0-9699-ec7bfe9e57ce/votes",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "agendas",
+                "0311a36e-4b86-45a0-9699-ec7bfe9e57ce",
+                "votes"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
